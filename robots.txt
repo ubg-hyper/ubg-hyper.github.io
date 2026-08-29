@@ -11,11 +11,6 @@ Allow: /games/
 Allow: /assets/
 
 
-# Block certain file types that don't need indexing
-Disallow: *.js$
-Disallow: *.css$
-Disallow: *.json$
-
-# Allow important directories
+# Search engines need these assets to render the site and discover its content.
 Allow: /games/*.html
 Allow: /assets/images/ 
