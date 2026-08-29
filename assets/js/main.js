@@ -24,13 +24,46 @@ class GameSite {
 
   setupEventListeners() {
     // Nav toggle for mobile
-    const navToggle = document.getElementById('nav-toggle');
+    let navToggle = document.getElementById('nav-toggle');
     const navMenu = document.getElementById('nav-menu');
 
     if (navToggle && navMenu) {
+      // Upgrade legacy markup to a real button without requiring edits to
+      // every generated game page.
+      if (navToggle.tagName !== 'BUTTON') {
+        const buttonToggle = document.createElement('button');
+        buttonToggle.type = 'button';
+        buttonToggle.id = navToggle.id;
+        buttonToggle.className = navToggle.className;
+        buttonToggle.innerHTML = navToggle.innerHTML;
+        navToggle.replaceWith(buttonToggle);
+        navToggle = buttonToggle;
+      }
+
+      const setMenuState = (isOpen) => {
+        navMenu.classList.toggle('show-menu', isOpen);
+        navToggle.classList.toggle('active', isOpen);
+        navToggle.setAttribute('aria-expanded', String(isOpen));
+        navToggle.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+      };
+
+      navToggle.setAttribute('type', 'button');
+      navToggle.setAttribute('aria-controls', 'nav-menu');
+      setMenuState(false);
+
       navToggle.addEventListener('click', () => {
-        navMenu.classList.toggle('show-menu');
-        navToggle.classList.toggle('active');
+        setMenuState(!navMenu.classList.contains('show-menu'));
+      });
+
+      navToggle.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          setMenuState(!navMenu.classList.contains('show-menu'));
+        }
+      });
+
+      navMenu.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', () => setMenuState(false));
       });
     }
 
@@ -107,11 +140,11 @@ class GameSite {
     window.addEventListener('scroll', () => {
       const header = document.querySelector('.header');
       if (window.scrollY > 100) {
-        header.style.background = 'rgba(255, 255, 255, 0.98)';
-        header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+        header.style.background = 'rgba(7, 17, 31, 0.96)';
+        header.style.boxShadow = '0 8px 30px rgba(0, 0, 0, 0.28)';
       } else {
-        header.style.background = 'rgba(255, 255, 255, 0.95)';
-        header.style.boxShadow = 'none';
+        header.style.background = 'rgba(7, 17, 31, 0.88)';
+        header.style.boxShadow = '0 8px 30px rgba(0, 0, 0, 0.2)';
       }
     });
 
@@ -292,6 +325,9 @@ class GameSite {
     // Check if we're already in games directory
     const currentPath = window.location.pathname;
     const gameUrl = currentPath.includes('/games/') ? `${slug}.html` : `games/${slug}.html`;
+    const fallbackIconSrc = currentPath.includes('/games/')
+      ? '../games-data/there-is-no-game.png'
+      : 'games-data/there-is-no-game.png';
     
     // Create pure HTML link element - no JavaScript navigation
     const gameCard = document.createElement('a');
@@ -300,12 +336,22 @@ class GameSite {
     gameCard.style.animationDelay = `${(index % 12) * 0.1}s`;
     
     gameCard.innerHTML = `
-      <img src="${iconSrc}" alt="${game.title}" class="game-item-icon">
+      <img src="${iconSrc}" alt="${game.title}" class="game-item-icon" loading="lazy">
       <div class="game-item-title">${game.title}</div>
       ${game.popular ? '<span class="game__badge game__badge--popular">Popular</span>' : ''}
       ${game.new ? '<span class="game__badge game__badge--new">New</span>' : ''}
       ${game.trending ? '<span class="game__badge game__badge--trending">Trending</span>' : ''}
     `;
+
+    const gameIcon = gameCard.querySelector('.game-item-icon');
+    if (gameIcon) {
+      gameIcon.addEventListener('error', () => {
+        if (gameIcon.dataset.fallbackApplied) return;
+        gameIcon.dataset.fallbackApplied = 'true';
+        gameIcon.src = fallbackIconSrc;
+        gameIcon.alt = `${game.title} thumbnail unavailable`;
+      });
+    }
     
     return gameCard;
   }

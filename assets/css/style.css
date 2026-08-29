@@ -83,6 +83,27 @@ body {
   padding-top: 70px; /* Header Height */
 }
 
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 2000;
+  padding: 0.7rem 1rem;
+  border-radius: var(--border-radius);
+  background: var(--primary-color);
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  transform: translateY(-160%);
+  transition: var(--transition-fast);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+  outline: 3px solid var(--secondary-color);
+  outline-offset: 3px;
+}
+
 img {
   max-width: 100%;
   height: auto;
@@ -245,6 +266,14 @@ input {
   flex-direction: column;
   gap: 4px;
   cursor: pointer;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border: 0;
+  background: transparent;
+  border-radius: var(--border-radius);
 }
 
 .nav__toggle span {
@@ -253,6 +282,11 @@ input {
   background: var(--text-primary);
   border-radius: 2px;
   transition: var(--transition-fast);
+}
+
+.nav__toggle:focus-visible {
+  outline: 3px solid var(--primary-color);
+  outline-offset: 2px;
 }
 
 /* ===== MAIN CONTENT ===== */
@@ -273,19 +307,13 @@ input {
   margin: 0 auto;
 }
 
-/* ===== HERO SECTION ===== */
-.hero {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-  padding: var(--space-12) 0;
-  text-align: center;
-}
-
-.hero__title {
-  font-size: var(--font-size-3xl);
-  font-weight: 700;
-  color: white;
-  margin: 0;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.search__label {
+  display: block;
+  margin-bottom: var(--space-2);
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  text-align: left;
 }
 
 .search__title {
@@ -312,15 +340,67 @@ input {
 }
 
 .search__input {
-  flex: 1;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
   padding: var(--space-4);
-  background: transparent;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
   font-size: var(--font-size-base);
   color: var(--text-primary);
+  transition: var(--transition);
+}
+
+.search__input:focus {
+  border-color: var(--primary-color);
+  outline: 3px solid rgba(99, 102, 241, 0.18);
+  outline-offset: 2px;
 }
 
 .search__input::placeholder {
   color: var(--text-light);
+}
+
+.home-intro {
+  padding: var(--space-8) 0 var(--space-6);
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.home-intro .container {
+  max-width: 880px;
+  text-align: center;
+}
+
+.home-intro h1 {
+  margin: 0 0 var(--space-3);
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  letter-spacing: -0.03em;
+}
+
+.home-intro p {
+  max-width: 760px;
+  margin: 0 auto;
+  color: var(--text-secondary);
+  font-size: var(--font-size-lg);
+  line-height: 1.7;
+}
+
+.home-intro__note {
+  margin-top: var(--space-3) !important;
+  color: var(--text-muted) !important;
+  font-size: var(--font-size-sm) !important;
+}
+
+/* Google can add a centering margin to sidebar slots even when the slot is
+   already only as wide as the sidebar. Keep those placements inside the grid. */
+.game-sidebar-left ins.adsbygoogle,
+.game-sidebar-right ins.adsbygoogle {
+  margin-left: 0 !important;
+  max-width: 100% !important;
 }
 
 .search__btn {
@@ -768,6 +848,7 @@ input {
   cursor: pointer;
   transition: var(--transition);
   font-size: var(--font-size-sm);
+  min-height: 44px;
 }
 
 .game-like-btn:hover {
@@ -789,6 +870,11 @@ input {
   transition: var(--transition);
 }
 
+.fullscreen-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
 .game-fullscreen-btn {
   padding: 0.5rem 0.75rem;
   background: var(--primary-color);
@@ -801,6 +887,7 @@ input {
   display: flex;
   align-items: center;
   gap: 0.25rem;
+  min-height: 44px;
 }
 
 .game-fullscreen-btn:hover {
@@ -982,7 +1069,7 @@ input {
   left: 0;
   right: 0;
   background: linear-gradient(transparent, rgba(0,0,0,0.9));
-  color: white;
+  color: var(--text-primary);
   font-size: var(--font-size-xs);
   font-weight: 500;
   padding: 1rem 0.5rem 0.5rem;
@@ -991,8 +1078,8 @@ input {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  opacity: 0;
-  transform: translateY(100%);
+  opacity: 1;
+  transform: translateY(0);
   transition: all 0.3s ease;
 }
 
@@ -1202,6 +1289,11 @@ input {
 
 /* Responsive Design */
 @media (max-width: 1200px) {
+  .game-sidebar-left .ad-sidebar,
+  .game-sidebar-right .ad-sidebar {
+    display: none;
+  }
+
   .game-container {
     grid-template-columns: 150px 1fr 150px;
     padding: 0.25rem;
@@ -1363,9 +1455,42 @@ input {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  opacity: 0;
-  transform: translateY(100%);
+  opacity: 1;
+  transform: translateY(0);
   transition: all 0.3s ease;
+}
+
+/* The no-JavaScript category fallback uses text links instead of image cards. */
+.static-game-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-3);
+  padding: var(--space-4) 0;
+}
+
+.static-game-links h2 {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--text-primary);
+  font-size: var(--font-size-xl);
+}
+
+.static-game-links .game-item {
+  min-height: 44px;
+  padding: var(--space-3);
+  aspect-ratio: auto;
+  background: var(--bg-secondary);
+}
+
+.static-game-links .game-item-title {
+  position: static;
+  display: block;
+  padding: 0;
+  background: transparent;
+  color: var(--text-primary);
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
 }
 
 /* Game Badges */

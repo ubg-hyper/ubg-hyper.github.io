@@ -3291,9 +3291,15 @@ function getRandomGames(excludeGame, count = 6) {
 }
 
 function createGameSlug(title) {
-    return title.toLowerCase()
+    const slug = title.toLowerCase()
         .replace(/[^a-z0-9\s-]/g, '')
         .replace(/\s+/g, '-')
         .replace(/-{2,}/g, '-')
         .replace(/^-|-$/g, '');
+
+    // Keep the legacy page filename working when the title is more descriptive than its URL.
+    const slugAliases = {
+        'fireboy-and-watergirl-in-the-forest-temple': 'fireboy-and-watergirl'
+    };
+    return slugAliases[slug] || slug;
 }
