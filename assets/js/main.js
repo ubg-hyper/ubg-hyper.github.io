@@ -1,4 +1,4 @@
-// Main JavaScript functionality for GG+ Unblocked
+// Main JavaScript functionality for Unblocked games Hyper
 
 class GameSite {
   constructor() {

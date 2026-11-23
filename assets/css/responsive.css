@@ -595,7 +595,7 @@
  
 
 /* ==========================================================================
-   GG+ MODERN UI SYSTEM
+   Unblocked games Hyper MODERN UI SYSTEM
    Shared visual layer for the homepage, category pages, and game pages.
    ========================================================================== */
 :root {
@@ -790,27 +790,6 @@ body {
 .game__badge--trending { background: #2563eb; }
 .game__badge--new { background: #10b981; }
 
-.ad-container {
-  min-height: 0;
-  padding: 0;
-  background: transparent;
-  border: 0;
-  border-radius: 0;
-  overflow: visible;
-}
-
-.ad-top {
-  width: 100%;
-  margin: 24px auto;
-  text-align: center;
-}
-
-.ad-inline {
-  width: 100%;
-  margin: 24px auto;
-  text-align: center;
-}
-
 .description {
   background: rgba(13, 27, 42, 0.7);
   border-block: 1px solid rgba(168, 185, 203, 0.12);
@@ -879,11 +858,6 @@ body {
   color: rgba(255, 255, 255, 0.82);
   font-size: 1.08rem;
   line-height: 1.65;
-}
-
-body:has(.category-hero) .ad-top {
-  margin-top: 82px !important;
-  margin-bottom: 20px !important;
 }
 
 body:has(.category-hero) .main {
